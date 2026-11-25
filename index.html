@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Underwater Camera Simulator</title>
+  <meta name="description" content="Interactive simulator showing how depth, water clarity, camera settings, distance and strobe lighting change an underwater photo.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <h1>Underwater Camera Simulator</h1>
+    <p>Change the water, the camera and the strobe, and see how the photo changes.</p>
+  </header>
+
+  <main class="layout">
+    <section class="stage" aria-label="Simulated photo">
+      <div class="frame">
+        <canvas id="view" aria-label="Simulated underwater photograph"></canvas>
+        <div id="hud" class="hud"></div>
+        <div id="badge" class="badge" hidden>As it looks in air (reference)</div>
+      </div>
+
+      <div class="stage-bar">
+        <button id="holdAir" type="button">Hold to see it in air</button>
+        <button id="save" type="button">Save photo</button>
+        <button id="reset" type="button">Reset</button>
+      </div>
+
+      <div class="meters">
+        <div class="meter"><span>Exposure</span><b id="mExp">-</b></div>
+        <div class="meter"><span>Blown highlights</span><b id="mClip">-</b></div>
+        <div class="meter"><span>Visibility</span><b id="mVis">-</b></div>
+        <div class="meter"><span>Red sunlight left</span><b id="mRed">-</b></div>
+      </div>
+
+      <canvas id="hist" width="256" height="64" aria-label="Histogram of red, green and blue"></canvas>
+
+      <h2>Presets</h2>
+      <div id="presets" class="presets"></div>
+
+      <h2>What is happening</h2>
+      <ul id="notes" class="notes"></ul>
+    </section>
+
+    <section class="controls" aria-label="Controls">
+      <fieldset>
+        <legend>Water and light</legend>
+        <label class="row"><span>Water type</span>
+          <select data-key="water">
+            <option value="clear">Clear tropical blue</option>
+            <option value="green">Green temperate</option>
+            <option value="murky">Murky / estuary</option>
+          </select><output></output></label>
+        <label class="row"><span>Suspended particles</span>
+          <input type="range" data-key="turb" min="0" max="1" step="0.05"><output data-out="turb"></output></label>
+        <label class="row"><span>Camera depth</span>
+          <input type="range" data-key="depth" min="0" max="40" step="1"><output data-out="depth"></output></label>
+        <label class="row"><span>Surface light</span>
+          <select data-key="light">
+            <option value="sun">Bright sun</option>
+            <option value="over">Overcast</option>
+            <option value="dusk">Dusk</option>
+            <option value="night">Night</option>
+          </select><output></output></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Subject</legend>
+        <label class="row"><span>Distance to subject</span>
+          <input type="range" data-key="dist" min="0.25" max="6" step="0.05"><output data-out="dist"></output></label>
+        <label class="row check"><input type="checkbox" data-key="chart"><span>Show colour reference card</span><output></output></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Camera</legend>
+        <label class="row"><span>Lens</span>
+          <select data-key="lens">
+            <option value="15">15mm wide-angle</option>
+            <option value="24">24mm wide</option>
+            <option value="50">50mm standard</option>
+            <option value="100">100mm macro</option>
+          </select><output></output></label>
+        <label class="row"><span>Aperture</span>
+          <input type="range" data-key="ap" min="0" max="8" step="1"><output data-out="ap"></output></label>
+        <label class="row"><span>Shutter speed</span>
+          <input type="range" data-key="sh" min="0" max="8" step="1"><output data-out="sh"></output></label>
+        <label class="row"><span>ISO</span>
+          <input type="range" data-key="iso" min="0" max="6" step="1"><output data-out="iso"></output></label>
+        <label class="row"><span>White balance</span>
+          <select data-key="wb">
+            <option value="daylight">Daylight (5500K)</option>
+            <option value="auto">Custom, set for ambient light</option>
+            <option value="filter">Red filter</option>
+          </select><output></output></label>
+        <label class="row check"><input type="checkbox" data-key="af"><span>Autofocus on the subject</span><output></output></label>
+        <label class="row"><span>Focus distance</span>
+          <input type="range" data-key="focus" min="0.25" max="10" step="0.05"><output data-out="focus"></output></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Strobe</legend>
+        <label class="row check"><input type="checkbox" data-key="strobe"><span>Strobe on</span><output></output></label>
+        <label class="row"><span>Power</span>
+          <input type="range" data-key="pow" min="0" max="5" step="1"><output data-out="pow"></output></label>
+        <label class="row"><span>Distance from lens</span>
+          <input type="range" data-key="off" min="0.1" max="0.7" step="0.05"><output data-out="off"></output></label>
+      </fieldset>
+    </section>
+  </main>
+
+  <footer>
+    <p>A teaching model, not a measurement tool. Light absorption, scattering, strobe falloff, exposure, depth of field and motion blur are simulated with simplified physics on a painted reef scene.</p>
+  </footer>
+
+  <script src="sim.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
